@@ -1,6 +1,6 @@
 const studentService = require('../services/studentService');
 
-export const createStudent = async (req, res) => {
+const createStudent = async (req, res) => {
   try {
     const student = await studentService.createStudent(req.body);
     res.status(201).json(student);
@@ -9,7 +9,7 @@ export const createStudent = async (req, res) => {
   }
 };
 
-export const getStudent = async (req, res) => {
+const getStudent = async (req, res) => {
   try {
     const student = await studentService.getStudentById(req.params.enrollment_number);
     if (student) {
@@ -20,4 +20,9 @@ export const getStudent = async (req, res) => {
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
+};
+
+module.exports = {
+  createStudent,
+  getStudent
 };
