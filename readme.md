@@ -25,7 +25,6 @@ This project is designed to provide a comprehensive platform for conducting onli
 - **Exam Management**: Teachers can upload questions, set exam timings, and manage exams.
 - **Student Portal**: Students can log in, choose subjects, take exams, and view their results.
 - **Admin Dashboard**: Admins can analyze student performance and provide study materials based on weak areas.
-- **JWT Authentication**: Used for secure API requests and session management.
 
 ## Technologies Used
 
