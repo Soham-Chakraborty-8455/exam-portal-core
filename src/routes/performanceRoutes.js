@@ -2,8 +2,9 @@
 const express = require('express');
 const router = express.Router();
 const performanceController = require('../controllers/performanceController');
+const authMiddleware = require('../middleware/auth');
 
-router.get('/', performanceController.viewAllPerformances);
-router.get('/total-marks/:exam_id', performanceController.calculateTotalMarks);
+router.get('/',authMiddleware, performanceController.viewAllPerformances);
+router.get('/total-marks/:exam_id',authMiddleware, performanceController.calculateTotalMarks);
 
 module.exports = router;
