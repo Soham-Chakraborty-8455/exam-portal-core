@@ -1,3 +1,4 @@
+
 # Examination Portal
 
 This project is an Examination Portal built using Node.js and Express.js. The portal allows users to sign up, log in, take exams, and for teachers to upload question papers and set timers. The project uses PostgreSQL as the database and Sequelize as the ORM.
@@ -24,7 +25,7 @@ This project is designed to provide a comprehensive platform for conducting onli
 - **User Authentication**: Sign up, log in, and log out functionality using sessions.
 - **Exam Management**: Teachers can upload questions, set exam timings, and manage exams.
 - **Student Portal**: Students can log in, choose subjects, take exams, and view their results.
-- **Admin Dashboard**: Admins can analyze student performance and provide study materials based on weak areas.
+- **Student Dashboard**: Student can analyze performance and provide study materials based on weak areas.
 
 ## Technologies Used
 
@@ -43,29 +44,27 @@ src/
 │
 ├── controllers/
 │   ├── authController.js
-│   ├── studentController.js
 │   ├── examController.js
-│   └── teacherController.js
+│   └── performanceController.js
 │
 ├── models/
-│   ├── user.js
-│   ├── exam.js
-│   └── index.js
+│   ├── userModel.js
+│   ├── examModel.js
+│   ├── questionModel.js
+│   └── performanceModel.js
 │
 ├── routes/
 │   ├── authRoutes.js
-│   ├── studentRoutes.js
 │   ├── examRoutes.js
-│   └── teacherRoutes.js
+│   └── performanceRoutes.js
 │
 ├── services/
 │   ├── authService.js
-│   ├── studentService.js
 │   ├── examService.js
-│   └── teacherService.js
+│   └── performanceService.js
 │
 ├── utils/
-│   ├── database.js
+│   ├── db.js
 │   └── session.js
 │
 └── middleware/
@@ -97,7 +96,7 @@ src/
 
 3. **Set up the PostgreSQL database**
 
-    Create a PostgreSQL database and update the connection details in `src/utils/database.js`.
+    Create a PostgreSQL database and update the connection details in `src/utils/db.js`.
 
 4. **Run migrations (if any)**
 
@@ -119,7 +118,7 @@ src/
 ### Development Mode
 
 ```bash
-npm run dev
+npm run start:dev
 ```
 
 This will start the server using `nodemon`, which automatically restarts the server on file changes.
@@ -129,31 +128,6 @@ This will start the server using `nodemon`, which automatically restarts the ser
 ```bash
 npm start
 ```
-
-## API Endpoints
-
-Here are some of the key API endpoints:
-
-### Authentication
-
-- **POST** `/auth/signup`: Create a new user.
-- **POST** `/auth/login`: Log in with an existing user.
-- **POST** `/auth/logout`: Log out the current user.
-
-### Students
-
-- **GET** `/students/exams`: Fetch available exams.
-- **POST** `/students/exams/start`: Start an exam.
-- **GET** `/students/performance`: View performance data.
-
-### Teachers
-
-- **POST** `/teachers/exams/upload`: Upload a new exam.
-- **POST** `/teachers/exams/timer`: Set a timer for an exam.
-
-### Admin
-
-- **GET** `/admin/analysis`: Analyze student performance.
 
 ## Authentication
 
@@ -167,30 +141,46 @@ Here is a simplified view of the main tables:
 
 ### User Table
 
-| Column          | Type    | Description                     |
-| --------------- | ------- | ------------------------------- |
-| id              | UUID    | Primary Key                     |
-| name            | String  | Full name of the user           |
-| email           | String  | Unique email address            |
-| phone_number    | String  | Unique phone number             |
-| password        | String  | Hashed password                 |
-| type            | Enum    | Type of user (`Student` or `Teacher`) |
+| Column       | Type   | Description                            |
+|--------------|--------|----------------------------------------|
+| id           | UUID   | Primary Key                            |
+| name         | String | Full name of the user                  |
+| email        | String | Unique email address                   |
+| phone_number | String | Unique phone number                    |
+| password     | String | Hashed password                        |
+| type         | Enum   | Type of user (`Student` or `Teacher`)  |
 
 ### Exam Table
 
-| Column    | Type    | Description       |
-| --------- | ------- | ----------------- |
-| id        | UUID    | Primary Key       |
-| questions | JSON    | Questions for the exam |
-| start_time | DateTime | Start time of the exam |
-| end_time   | DateTime | End time of the exam |
+| Column       | Type     | Description                            |
+|--------------|----------|----------------------------------------|
+| exam_id      | UUID     | Primary Key                            |
+| exam_name    | String   | Name of the exam                       |
+| start_time   | DateTime | Start time of the exam                 |
+| end_time     | DateTime | End time of the exam                   |
+
+### Question Table
+
+| Column       | Type     | Description                                       |
+|--------------|----------|---------------------------------------------------|
+| question_id  | UUID     | Primary Key                                       |
+| exam_id      | UUID     | Foreign Key to Exam Table                         |
+| question     | String   | The question text                                 |
+| marks        | Integer  | Marks assigned to the question                    |
+| negative     | Integer  | Negative marking value (positive, treated as -1)  |
+| option       | JSON     | Available options in JSON format                  |
+| answer       | String   | Correct answer                                    |
 
 ### Performance Table
 
-| Column      | Type   | Description                          |
-| ----------- | ------ | ------------------------------------ |
-| id          | UUID   | Primary Key                          |
-| test_id     | UUID   | Foreign Key to Exam Table            |
-| performance | JSON   | Performance details                  |
-| score       | Integer| Score obtained                       |
-| materials   | BLOB   | Study materials for improvement      |
+| Column        | Type    | Description                          |
+|---------------|---------|--------------------------------------|
+| id            | UUID    | Primary Key                          |
+| user_id       | UUID    | Foreign Key to User Table            |
+| question_id   | UUID    | Foreign Key to Question Table        |
+| exam_id       | UUID    | Foreign Key to Exam Table            |
+| correct       | Boolean | Whether the answer was correct       |
+| marked_option | String  | Option marked by the student         |
+| marks         | Integer | Marks obtained for the question      |
+
+
