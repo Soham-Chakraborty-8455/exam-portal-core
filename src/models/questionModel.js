@@ -23,6 +23,15 @@ const Question = sequelize.define('Question', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  marks: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  negative: {
+    type: DataTypes.INTEGER, //contains positive value. Eg is value is 1, it will be treated as -1 for every wrong answer
+    defaultValue: 0,
+    allowNull: false,
+  },
   option: {
     type: DataTypes.JSON,
     allowNull: false,

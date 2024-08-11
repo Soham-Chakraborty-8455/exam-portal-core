@@ -7,10 +7,11 @@ const {
   deleteExam,
 } = require('../controllers/examController');
 const router = express.Router();
+const authMiddleware = require('../middlewares/authMiddleware');
 
-router.post('/', createExam);
-router.get('/:exam_id', getExam);
-router.put('/:exam_id', updateExam);
-router.delete('/:exam_id', deleteExam);
+router.post('/',authMiddleware, createExam);
+router.get('/:exam_id',authMiddleware, getExam);
+router.put('/:exam_id',authMiddleware, updateExam);
+router.delete('/:exam_id',authMiddleware, deleteExam);
 
 module.exports = router;
