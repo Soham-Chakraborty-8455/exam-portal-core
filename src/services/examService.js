@@ -6,7 +6,12 @@ const createExam = async (data) => {
 };
 
 const getExamById = async (exam_id) => {
-  return await Exam.findByPk(exam_id);
+  return await Exam.findByPk(exam_id, {
+    include: [{
+      model: Question,
+      as: 'questions' 
+    }]
+  });
 };
 
 const updateExam = async (exam_id, data) => {

@@ -1,4 +1,3 @@
-// src/controllers/examController.js
 const examService = require('../services/examService');
 
 const createExam = async (req, res) => {
