@@ -20,11 +20,7 @@ const Exam = sequelize.define('Exam', {
   end_time: {
     type: DataTypes.DATE,
     allowNull: false,
-  },
-  questions: {
-    type: DataTypes.JSONB,  // Store questions as JSON
-    allowNull: false,
-  },
+  }
 });
 
 module.exports = Exam;

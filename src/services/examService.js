@@ -1,8 +1,8 @@
-// src/services/examService.js
 const Exam = require('../models/examModel');
 
 const createExam = async (data) => {
-  return await Exam.create(data);
+  const exam = await Exam.create(data);
+  return exam.exam_id;
 };
 
 const getExamById = async (exam_id) => {

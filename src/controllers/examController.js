@@ -12,12 +12,48 @@ const createExam = async (req, res) => {
 
 const getExam = async (req, res) => {
   try {
+    if (req.user.type !== "Student") throw new Error("Student not found");
+
     const exam = await examService.getExamById(req.params.exam_id);
-    if (exam) {
-      res.status(200).json(exam);
-    } else {
-      res.status(404).json({ error: 'Exam not found' });
+    if (!exam) {
+      return res.status(404).json({ error: 'Exam not found' });
     }
+
+    const examStartTime = exam.exam_starttime;
+    const examStartDate = exam.exam_startdate; 
+    const examDuration = exam.exam_duration * 60 * 1000; 
+
+    const currentDateTime = new Date();
+
+    const currDate = currentDateTime.toISOString().split('T')[0];
+    const currTime = currentDateTime.toTimeString().split(' ')[0];
+
+    let ms;
+    let flag;
+
+    if (examStartDate === currDate) {
+      const diff = new Date(`2000-01-01T${examStartTime}`) - new Date(`2000-01-01T${currTime}`);
+      ms = diff;
+    } else {
+      const dateDiff = new Date(examStartDate) - new Date(currDate);
+      const timeDiff = new Date(`2000-01-01T${examStartTime}`) - new Date(`2000-01-01T${currTime}`);
+      ms = dateDiff + timeDiff;
+    }
+    if (new Date(`2000-01-01T${examStartTime}`) >= new Date(`2000-01-01T${currTime}`)) {
+      flag = "Positive";
+    } else {
+      flag = "Negative";
+    }
+
+    const response = {
+      exam,
+      remainingTime: ms,
+      duration: examDuration,
+      difference: flag,
+    };
+
+    res.status(200).json(response);
+
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
