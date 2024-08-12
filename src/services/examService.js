@@ -1,3 +1,4 @@
+const { where } = require('sequelize');
 const Exam = require('../models/examModel');
 
 const createExam = async (data) => {
@@ -6,20 +7,21 @@ const createExam = async (data) => {
 };
 
 const getExamById = async (exam_id) => {
-  return await Exam.findByPk(exam_id, {
-    include: [{
-      model: Question,
-      as: 'questions' 
-    }]
-  });
+  return await Exam.findOne({where: {exam_id: exam_id}});
+  // return await Exam.findByPk(exam_id, {
+  //   include: [{
+  //     model: Question,
+  //     as: 'questions' 
+  //   }]
+  // });
 };
 
 const updateExam = async (exam_id, data) => {
-  return await Exam.update(data, { where: { exam_id } });
+  return await Exam.update(data, { where: { exam_id: exam_id } });
 };
 
 const deleteExam = async (exam_id) => {
-  return await Exam.destroy({ where: { exam_id } });
+  return await Exam.destroy({ where: { exam_id: exam_id } });
 };
 
 module.exports = {

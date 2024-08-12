@@ -24,16 +24,16 @@ const Exam = sequelize.define('Exam', {
   }
 });
 
-Exam.hasMany(Question, { 
-  foreignKey: 'exam_id', 
-  sourceKey: 'exam_id',
-  as: 'questions'  
-});
+// Exam.hasMany(Question, { 
+//   foreignKey: 'exam_id', 
+//   sourceKey: 'exam_id',
+//   as: 'questions'  
+// });
 
-Question.belongsTo(Exam, {
-  foreignKey: 'exam_id',
-  targetKey: 'exam_id',
-  as: 'exam'
-});
+// Question.belongsTo(Exam, {
+//   foreignKey: 'exam_id',
+//   targetKey: 'exam_id',
+//   as: 'exam'
+// });
 
 module.exports = Exam;

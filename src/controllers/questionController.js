@@ -4,8 +4,8 @@ const createQuestion = async (req, res) => {
     try {
       if (req.user.type !== "Teacher") throw new Error("Teacher not found");
   
-      const question = await questionService.createQuestion(req.body);
-      res.status(201).json(question);
+      const question_id = await questionService.createQuestion(req.body);
+      res.status(201).json(question_id);
     } catch (error) {
       res.status(400).json({ error: error.message });
     }

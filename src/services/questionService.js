@@ -7,15 +7,15 @@ const createQuestion = async (data) => {
 };
 
 const getQuestionById = async (question_id) => {
-  return await Question.findByPk(question_id);
+  return await Question.findOne({where: {question_id: question_id}});
 };
 
 const updateQuestion = async (question_id, data) => {
-  return await Question.update(data, { where: { question_id } });
+  return await Question.update(data, { where: { question_id: question_id } });
 };
 
 const deleteQuestion = async (question_id) => {
-  return await Question.destroy({ where: { question_id } });
+  return await Question.destroy({ where: { question_id: question_id } });
 };
 
 module.exports = {

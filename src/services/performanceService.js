@@ -3,7 +3,7 @@ const { Op } = require('sequelize');
 
 const getTotalMarks = async (user_id, exam_id) => {
   const performances = await Performance.findAll({
-    where: { user_id, exam_id },
+    where: { user_id: user_id, exam_id: exam_id },
   });
 
   let totalMarks = 0;
@@ -20,7 +20,7 @@ const getTotalMarks = async (user_id, exam_id) => {
 
 const getAllPerformancesByStudent = async (user_id) => {
   return await Performance.findAll({
-    where: { user_id },
+    where: { user_id: user_id },
     include: ['exam', 'question'],
   });
 };
