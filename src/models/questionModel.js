@@ -12,12 +12,12 @@ const Question = sequelize.define('Question', {
   exam_id: {
     type: DataTypes.UUID,
     allowNull: false,
-    references: {
-      model: Exam,
-      key: 'exam_id',
-    },
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE',
+    // references: {
+    //   model: Exam,
+    //   key: 'exam_id',
+    // },
+    // onUpdate: 'CASCADE',
+    // onDelete: 'CASCADE',
   },
   question: {
     type: DataTypes.STRING,

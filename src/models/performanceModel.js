@@ -56,10 +56,4 @@ const Performance = sequelize.define('Performance', {
   },
 });
 
-// User.hasMany(Performance, { foreignKey: 'user_id', as: 'performances' });
-// Performance.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
-
-// Question.hasMany(Performance, { foreignKey: 'question_id', as: 'performances' });
-// Performance.belongsTo(Question, { foreignKey: 'question_id', as: 'question' });
-
 module.exports = Performance;

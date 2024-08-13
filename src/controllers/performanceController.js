@@ -1,5 +1,18 @@
-// src/controllers/performanceController.js
 const performanceService = require('../services/performanceService');
+
+const createPerformanceEntry = async (req, res) => {
+  try {
+    const { exam_id } = req.params;
+    const { user_id } = req.session.user;
+    const { question_id, marked_option} = req.query;
+
+    const performance_id = await performanceService.createPerformanceEntry(user_id, exam_id, marked_option, question_id);
+
+    res.status(200).json({ performance_id });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
 const calculateTotalMarks = async (req, res) => {
   try {
@@ -29,4 +42,5 @@ const viewAllPerformances = async (req, res) => {
 module.exports = {
   calculateTotalMarks,
   viewAllPerformances,
+  createPerformanceEntry
 };
