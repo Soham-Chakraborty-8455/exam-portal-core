@@ -4,11 +4,13 @@ const questionRoutes = require('./routes/questionRoutes');
 const authRoutes = require('./routes/authRoutes');
 const performanceRoutes = require('./routes/performanceRoutes');
 const sessionMiddleware = require('./utils/session');
+const cors = require('cors');
 
 const app = express();
 
 app.use(express.json());
 app.use(sessionMiddleware);
+app.use(cors());
 
 app.use('/api/exams', examRoutes);
 app.use('/api/question', questionRoutes);
