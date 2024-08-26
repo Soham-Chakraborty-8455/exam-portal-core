@@ -40,7 +40,14 @@ exports.login = async (req, res) => {
         }
 
         req.session.user = user;
-        res.status(200).json({ message: 'Login successful', user });
+        req.session.save((err) => {
+            if (err) {
+                return res.status(500).json({ message: 'Error saving session', error: err });
+            }
+
+            res.status(200).json({ message: 'Login successful', user });
+        });
+        // res.status(200).json({ message: 'Login successful', user });
     } catch (error) {
         res.status(500).json({ message: 'Error logging in', error });
     }
