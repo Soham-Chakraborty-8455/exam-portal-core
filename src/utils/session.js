@@ -20,7 +20,7 @@ const secretKey = process.env.SESSION_SECRET || '5086ece3c805708208394e285bd3325
 const sessionMiddleware = session({
     secret: secretKey,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     store: store,
     cookie: { secure: false, maxAge: 60000 } // Set `secure: true` if using https
 });

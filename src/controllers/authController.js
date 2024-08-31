@@ -38,7 +38,7 @@ exports.login = async (req, res) => {
         if (!isMatch) {
             return res.status(401).json({ message: 'Invalid email or password' });
         }
-
+        req.session.isAuthenticated = true;
         req.session.user = user;
         req.session.save((err) => {
             if (err) {

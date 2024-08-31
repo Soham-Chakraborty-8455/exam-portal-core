@@ -3,11 +3,12 @@ module.exports = (req, res, next) => {
     //     return res.status(401).json({ message: 'Unauthorized' });
     // }
     // next();
-    console.log('Session:', req.session);
-    if (req.session && req.session.user) {
-        req.user = req.session.user; 
+    console.log('Session:', req.session.user);
+    console.log('Is Authenticates:', req.session.isAuthenticated);
+    if (req.session.user) {
+        // req.user = req.session.user; 
         next();
     } else {
-        res.status(401).json({ message: 'Unauthorized' });
+        return res.status(401).json({ message: 'Unauthorized' });
     }
 };
