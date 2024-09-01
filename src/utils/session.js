@@ -22,7 +22,7 @@ const sessionMiddleware = session({
     resave: false,
     saveUninitialized: true,
     store: store,
-    cookie: { secure: false, maxAge: 60000 } // Set `secure: true` if using https
+    cookie: { secure: false, maxAge: 24*60*60*1000 } // Set `secure: true` if using https
 });
 
 module.exports = sessionMiddleware;

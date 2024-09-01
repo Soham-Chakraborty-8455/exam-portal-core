@@ -14,7 +14,7 @@ This project is an Examination Portal built using Node.js and Express.js. The po
 - [API Endpoints](#api-endpoints)
 - [Authentication](#authentication)
 - [Database Schema](#database-schema)
-- [License](#license)
+- [API Documentation](#api-documentation)
 
 ## Project Description
 
@@ -26,6 +26,7 @@ This project is designed to provide a comprehensive platform for conducting onli
 - **Exam Management**: Teachers can upload questions, set exam timings, and manage exams.
 - **Student Portal**: Students can log in, choose subjects, take exams, and view their results.
 - **Student Dashboard**: Student can analyze performance and provide study materials based on weak areas.
+- **Exam Timer**: Student have to take the test with a timer with auto submission feature once the timer exhausts.
 
 ## Technologies Used
 
@@ -34,8 +35,9 @@ This project is designed to provide a comprehensive platform for conducting onli
 - **PostgreSQL**: Relational database management system.
 - **Sequelize**: Promise-based Node.js ORM for SQL databases.
 - **Express-Session**: Middleware for managing sessions.
-- **bcryptjs**: Library to hash passwords.
+- **bcryptjs**: Library to salt and hash passwords.
 - **Nodemon**: Utility that monitors for changes and automatically restarts the server.
+- **Mongodb**: Storing and Managing session details.
 
 ## Project Structure
 
@@ -45,7 +47,8 @@ src/
 ├── controllers/
 │   ├── authController.js
 │   ├── examController.js
-│   └── performanceController.js
+│   ├── performanceController.js
+│   └── questionController.js
 │
 ├── models/
 │   ├── userModel.js
@@ -56,10 +59,11 @@ src/
 ├── routes/
 │   ├── authRoutes.js
 │   ├── examRoutes.js
+│   ├── questionRoutes.js
 │   └── performanceRoutes.js
 │
 ├── services/
-│   ├── authService.js
+│   ├── questionService.js
 │   ├── examService.js
 │   └── performanceService.js
 │
@@ -68,7 +72,9 @@ src/
 │   └── session.js
 │
 └── middleware/
-    └── auth.js
+    ├── auth.js
+    └── association.js
+    
 ```
 
 ## Setup and Installation
@@ -84,7 +90,7 @@ src/
 1. **Clone the repository**
 
     ```bash
-    git clone https://github.com/your-username/examination-portal.git
+    git clone https://github.com/Soham-Chakraborty-8455/exam-portal-core.git
     cd examination-portal
     ```
 
@@ -111,6 +117,8 @@ src/
     ```
     DATABASE_URL=your-database-url
     SESSION_SECRET=your-session-secret
+    mongoURI=your-mongo-connection-url
+    PORT=backend-port-number
     ```
 
 ## Running the Application
@@ -183,4 +191,215 @@ Here is a simplified view of the main tables:
 | marked_option | String  | Option marked by the student         |
 | marks         | Integer | Marks obtained for the question      |
 
+Here is a README file with API documentation for your application:
+
+---
+
+## API Documentation
+
+This document provides an overview of the API endpoints for your application, including authentication, exam management, performance tracking, and question management.
+
+## Table of Contents
+
+- [Authentication](#authentication)
+  - [Sign Up](#sign-up)
+  - [Login](#login)
+  - [Logout](#logout)
+- [Exam Management](#exam-management)
+  - [Create Exam](#create-exam)
+  - [Get Exam](#get-exam)
+  - [Update Exam](#update-exam)
+  - [Delete Exam](#delete-exam)
+- [Performance Tracking](#performance-tracking)
+  - [View All Performances](#view-all-performances)
+  - [Calculate Total Marks](#calculate-total-marks)
+  - [Create Performance Entry](#create-performance-entry)
+- [Question Management](#question-management)
+  - [Create Question](#create-question)
+  - [Update Question](#update-question)
+  - [Delete Question](#delete-question)
+
+## Authentication
+
+### Sign Up
+
+- **URL**: `/api/auth/signup`
+- **Method**: `POST`
+- **Description**: Register a new user.
+- **Request Body**:
+  ```json
+  {
+    "name": "string",
+    "email": "string",
+    "phone_number": "string",
+    "password": "string",
+    "type": "string" // Example: "Student" or "Teacher"
+  }
+  ```
+- **Response**:
+  - `201 Created`: User registered successfully.
+  - `500 Internal Server Error`: Error creating user.
+
+### Login
+
+- **URL**: `/api/auth/login`
+- **Method**: `POST`
+- **Description**: Authenticate user and create a session.
+- **Request Body**:
+  ```json
+  {
+    "email": "string",
+    "password": "string"
+  }
+  ```
+- **Response**:
+  - `200 OK`: Login successful.
+  - `401 Unauthorized`: Invalid email or password.
+  - `500 Internal Server Error`: Error logging in.
+
+### Logout
+
+- **URL**: `/api/auth/logout`
+- **Method**: `POST`
+- **Description**: Log out the user and destroy the session.
+- **Response**:
+  - `200 OK`: Logout successful.
+  - `500 Internal Server Error`: Error logging out.
+
+## Exam Management
+
+### Create Exam
+
+- **URL**: `/api/exams`
+- **Method**: `POST`
+- **Middleware**: `authMiddleware`
+- **Description**: Create a new exam.
+- **Request Body**:
+  ```json
+  {
+    // Exam details
+  }
+  ```
+- **Response**:
+  - `201 Created`: Exam created successfully.
+  - `400 Bad Request`: Error creating exam.
+
+### Get Exam
+
+- **URL**: `/api/exams/:exam_id`
+- **Method**: `GET`
+- **Middleware**: `authMiddleware`
+- **Description**: Get details of a specific exam.
+- **Response**:
+  - `200 OK`: Returns exam details.
+  - `404 Not Found`: Exam not found.
+  - `400 Bad Request`: Error retrieving exam.
+
+### Update Exam
+
+- **URL**: `/api/exams/:exam_id`
+- **Method**: `PUT`
+- **Middleware**: `authMiddleware`
+- **Description**: Update an existing exam.
+- **Request Body**:
+  ```json
+  {
+    // Exam details to be updated
+  }
+  ```
+- **Response**:
+  - `200 OK`: Exam updated successfully.
+  - `404 Not Found`: Exam not found.
+  - `400 Bad Request`: Error updating exam.
+
+### Delete Exam
+
+- **URL**: `/api/exams/:exam_id`
+- **Method**: `DELETE`
+- **Middleware**: `authMiddleware`
+- **Description**: Delete an existing exam.
+- **Response**:
+  - `200 OK`: Exam deleted successfully.
+  - `404 Not Found`: Exam not found.
+  - `400 Bad Request`: Error deleting exam.
+
+## Performance Tracking
+
+### View All Performances
+
+- **URL**: `/api/performance`
+- **Method**: `GET`
+- **Middleware**: `authMiddleware`
+- **Description**: View all performances for the authenticated user.
+- **Response**:
+  - `200 OK`: Returns all performances.
+  - `400 Bad Request`: Error retrieving performances.
+
+### Calculate Total Marks
+
+- **URL**: `/api/performance/total-marks/:exam_id`
+- **Method**: `GET`
+- **Middleware**: `authMiddleware`
+- **Description**: Calculate total marks for a specific exam.
+- **Response**:
+  - `200 OK`: Returns total marks.
+  - `400 Bad Request`: Error calculating total marks.
+
+### Create Performance Entry
+
+- **URL**: `/api/performance/:exam_id`
+- **Method**: `GET`
+- **Middleware**: `authMiddleware`
+- **Description**: Create a performance entry for a specific exam.
+- **Response**:
+  - `200 OK`: Performance entry created.
+  - `400 Bad Request`: Error creating performance entry.
+
+## Question Management
+
+### Create Question
+
+- **URL**: `/api/question`
+- **Method**: `POST`
+- **Middleware**: `authMiddleware`
+- **Description**: Create a new question.
+- **Request Body**:
+  ```json
+  {
+    // Question detail
+  }
+  ```
+- **Response**:
+  - `201 Created`: Question created successfully.
+  - `400 Bad Request`: Error creating question.
+
+### Update Question
+
+- **URL**: `/api/question/:question_id`
+- **Method**: `PUT`
+- **Middleware**: `authMiddleware`
+- **Description**: Update an existing question.
+- **Request Body**:
+  ```json
+  {
+    // Question details to be updated
+  }
+  ```
+- **Response**:
+  - `200 OK`: Question updated successfully.
+  - `404 Not Found`: Question not found.
+  - `400 Bad Request`: Error updating question.
+
+### Delete Question
+
+- **URL**: `/api/question/:question_id`
+- **Method**: `DELETE`
+- **Middleware**: `authMiddleware`
+- **Description**: Delete an existing question.
+- **Response**:
+  - `200 OK`: Question deleted successfully.
+  - `404 Not Found`: Question not found.
+  - `400 Bad Request`: Error deleting question.
+
+---
 
