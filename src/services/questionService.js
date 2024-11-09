@@ -18,9 +18,14 @@ const deleteQuestion = async (question_id) => {
   return await Question.destroy({ where: { question_id: question_id } });
 };
 
+const viewQuestion = async (exam_id)=>{
+  return await Question.findAll({ where: { exam_id:exam_id }});
+}
+
 module.exports = {
   createQuestion,
   getQuestionById,
   updateQuestion,
   deleteQuestion,
+  viewQuestion
 };

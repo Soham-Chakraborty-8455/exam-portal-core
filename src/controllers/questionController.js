@@ -41,9 +41,20 @@ const createQuestion = async (req, res) => {
     }
   };
   
+  const viewQuestion = async (req, res) => {
+    try {
+      if (req.session.user.dataValues.type !== "Teacher") throw new Error("Teacher not found");
+      const questions = await questionService.viewQuestion(req.params.exam_id);
+      res.status(201).json(questions);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  };
+
   module.exports = {
     createQuestion,
     updateQuestion,
     deleteQuestion,
+    viewQuestion
   };
   
