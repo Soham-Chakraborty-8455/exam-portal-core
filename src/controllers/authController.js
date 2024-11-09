@@ -40,7 +40,7 @@ exports.login = async (req, res) => {
         }
         req.session.isAuthenticated = true;
         req.session.user = user;
-        req.session.user.type= user.type;
+        req.session.user.dataValues.type= user.type;
         req.session.save((err) => {
             if (err) {
                 return res.status(500).json({ message: 'Error saving session', error: err });

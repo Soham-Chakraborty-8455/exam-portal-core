@@ -2,7 +2,7 @@ const questionService = require('../services/questionService');
 
 const createQuestion = async (req, res) => {
     try {
-      if (req.session.user.type !== "Teacher") throw new Error("Teacher not found");
+      if (req.session.user.dataValues.type !== "Teacher") throw new Error("Teacher not found");
   
       const question_id = await questionService.createQuestion(req.body);
       res.status(201).json(question_id);
@@ -13,7 +13,7 @@ const createQuestion = async (req, res) => {
 
   const updateQuestion = async (req, res) => {
     try {
-      if (req.session.user.type !== "Teacher") throw new Error("Teacher not found");
+      if (req.session.user.dataValues.type !== "Teacher") throw new Error("Teacher not found");
   
       const question = await questionService.updateQuestion(req.params.question_id, req.body);
       if (question[0] > 0) {
@@ -28,7 +28,7 @@ const createQuestion = async (req, res) => {
   
   const deleteQuestion = async (req, res) => {
     try {
-      if (req.session.user.type !== "Teacher") throw new Error("Teacher not found");
+      if (req.session.user.dataValues.type !== "Teacher") throw new Error("Teacher not found");
   
       const rowsDeleted = await questionService.deleteQuestion(req.params.question_id);
       if (rowsDeleted) {

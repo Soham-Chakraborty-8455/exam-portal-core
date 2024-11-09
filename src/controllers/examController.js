@@ -2,7 +2,7 @@ const examService = require('../services/examService');
 
 const createExam = async (req, res) => {
   try {
-    if (req.session.user.type !== "Teacher") throw new Error("Teacher not found");
+    if (req.session.user.dataValues.type !== "Teacher") throw new Error("Teacher not found");
 
     const exam = await examService.createExam(req.body);
     res.status(201).json(exam);
@@ -13,7 +13,7 @@ const createExam = async (req, res) => {
 
 const getExam = async (req, res) => {
   try {
-    if (req.session.user.type !== "Student") throw new Error("Student not found");
+    if (req.session.user.dataValues.type !== "Student") throw new Error("Student not found");
 
     const exam = await examService.getExamById(req.params.exam_id);
     if (!exam) {
@@ -62,7 +62,7 @@ const getExam = async (req, res) => {
 
 const updateExam = async (req, res) => {
   try {
-    if (req.session.user.type !== "Teacher") throw new Error("Teacher not found");
+    if (req.session.user.dataValues.type !== "Teacher") throw new Error("Teacher not found");
 
     const exam = await examService.updateExam(req.params.exam_id, req.body);
     if (exam[0] > 0) {
@@ -77,7 +77,7 @@ const updateExam = async (req, res) => {
 
 const deleteExam = async (req, res) => {
   try {
-    if (req.session.user.type !== "Teacher") throw new Error("Teacher not found");
+    if (req.session.user.dataValues.type !== "Teacher") throw new Error("Teacher not found");
 
     const rowsDeleted = await examService.deleteExam(req.params.exam_id);
     if (rowsDeleted) {
