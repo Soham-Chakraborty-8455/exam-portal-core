@@ -1,5 +1,6 @@
 // src/models/examModel.js
 const { DataTypes } = require('sequelize');
+const Question = require('./questionModel');
 const sequelize = require('../utils/db');
 
 const Exam = sequelize.define('Exam', {
@@ -22,6 +23,11 @@ const Exam = sequelize.define('Exam', {
     allowNull: false,
   },
   
+});
+
+Exam.hasMany(Question, {
+  foreignKey: 'exam_id',
+  as: 'questions', 
 });
 
 

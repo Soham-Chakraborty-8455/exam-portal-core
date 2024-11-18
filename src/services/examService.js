@@ -8,16 +8,28 @@ const createExam = async (data) => {
 };
 
 const getExamById = async (exam_id) => {
-  // return await Exam.findOne({where: {exam_id: exam_id}});
   return await Exam.findByPk(exam_id, {
-    include: [{
-      model: Question,
-      as: 'questions',
-      where :{ exam_id: exam_id},
-      attributes: { exclude: ['answer'] }
-    }]
+    include: [
+      {
+        model: Question,
+        as: 'questions', 
+        attributes: { exclude: ['answer'] }, 
+      },
+    ],
   });
 };
+
+// const getExamById = async (exam_id) => {
+//   // return await Exam.findOne({where: {exam_id: exam_id}});
+//   return await Exam.findByPk(exam_id, {
+//     include: [{
+//       model: Question,
+//       as: 'questions',
+//       where :{ exam_id: exam_id},
+//       attributes: { exclude: ['answer'] }
+//     }]
+//   });
+// };
 
 const updateExam = async (exam_id, data) => {
   return await Exam.update(data, { where: { exam_id: exam_id } });

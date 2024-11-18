@@ -43,4 +43,10 @@ const Question = sequelize.define('Question', {
   
 });
 
+// Question.belongsTo(Exam, {
+//   foreignKey: 'exam_id',
+//   as: 'exam', 
+// });
+
+
 module.exports = Question;
