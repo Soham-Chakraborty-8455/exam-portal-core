@@ -13,44 +13,37 @@ const createExam = async (req, res) => {
 
 const getExam = async (req, res) => {
   try {
-    if (req.session.user.dataValues.type !== "Student") throw new Error("Student not found");
-
+    if (req.session.user.dataValues.type !== "Student") {
+      throw new Error("Student not found");
+    }
+    
     const exam = await examService.getExamById(req.params.exam_id);
     if (!exam) {
       return res.status(404).json({ error: 'Exam not found' });
     }
 
-    const examStartTime = exam.exam_starttime;
-    const examStartDate = exam.exam_startdate; 
-    const examDuration = exam.exam_duration * 60 * 1000; 
+    const examStartTime = new Date(exam.start_time); 
+    const examEndTime = new Date(exam.end_time);     
 
     const currentDateTime = new Date();
 
-    const currDate = currentDateTime.toISOString().split('T')[0];
-    const currTime = currentDateTime.toTimeString().split(' ')[0];
-
-    let ms;
-    let flag;
-
-    if (examStartDate === currDate) {
-      const diff = new Date(`2000-01-01T${examStartTime}`) - new Date(`2000-01-01T${currTime}`);
-      ms = diff;
+    const examDuration = examEndTime - examStartTime; 
+    const remainingTime = examEndTime - currentDateTime; 
+    let status;
+    if (currentDateTime < examStartTime) {
+      const timeUntilStart = examStartTime - currentDateTime;
+      status = "Not Started";
+    } else if (currentDateTime >= examStartTime && currentDateTime <= examEndTime) {
+      status = "Ongoing";
     } else {
-      const dateDiff = new Date(examStartDate) - new Date(currDate);
-      const timeDiff = new Date(`2000-01-01T${examStartTime}`) - new Date(`2000-01-01T${currTime}`);
-      ms = dateDiff + timeDiff;
-    }
-    if (new Date(`2000-01-01T${examStartTime}`) >= new Date(`2000-01-01T${currTime}`)) {
-      flag = "Positive";
-    } else {
-      flag = "Negative";
+      status = "Ended";
     }
 
     const response = {
       exam,
-      remainingTime: ms,
-      duration: examDuration,
-      difference: flag,
+      remainingTime, 
+      duration: examDuration, 
+      status, 
     };
 
     res.status(200).json(response);
@@ -59,6 +52,7 @@ const getExam = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
 
 const updateExam = async (req, res) => {
   try {
