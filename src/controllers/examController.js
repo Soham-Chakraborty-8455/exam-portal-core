@@ -24,25 +24,30 @@ const getExam = async (req, res) => {
 
     const examStartTime = new Date(exam.start_time); 
     const examEndTime = new Date(exam.end_time);     
-
     const currentDateTime = new Date();
 
     const examDuration = examEndTime - examStartTime; 
     const remainingTime = examEndTime - currentDateTime; 
     let status;
+    let timeFromStart = 0; 
+
     if (currentDateTime < examStartTime) {
       const timeUntilStart = examStartTime - currentDateTime;
       status = "Not Started";
+      timeFromStart = -timeUntilStart; 
     } else if (currentDateTime >= examStartTime && currentDateTime <= examEndTime) {
       status = "Ongoing";
+      timeFromStart = currentDateTime - examStartTime; 
     } else {
       status = "Ended";
+      timeFromStart = examEndTime - examStartTime; 
     }
 
     const response = {
       exam,
       remainingTime, 
       duration: examDuration, 
+      timeFromStart,
       status, 
     };
 
@@ -52,6 +57,7 @@ const getExam = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
 
 
 const updateExam = async (req, res) => {
